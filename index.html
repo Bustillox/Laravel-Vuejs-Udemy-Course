@@ -4,9 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Vuejs Introduction</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 </head>
 <body>
-    
+    <div id="app">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <h1>Add Grade</h1>
+                    <label>Name</label>
+                    <input type="text" class="form-control" v-model="name">
+                    <label>Grade</label>
+                    <input type="number" max="100" min="0" class="form-control" v-model="grade">
+                    <input type="button" value="Save" class="btn btn-success" v-on:click="addGrade">
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <h1 v-if="list.length > 0">Grades List</h1>
+                    <h1 v-else="list">No existing grades</h1>
+                    <table class="table">
+                        <tr>
+                            <th>Name</th>
+                            <th>Grades</th>
+                        </tr>
+                        <tr v-for="item in list" v-bind:style="item.state==false?'color:red':''">
+                            <td v-text="item.name"></td>
+                            <td v-text="item.grade"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                    <p class="text-center">
+                        www.bustillox.com - bustillo@gmail.com
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+<script src="js/vue.js"></script>
+<script src="js/main.js"></script>
 </html>
