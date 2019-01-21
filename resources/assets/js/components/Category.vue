@@ -122,7 +122,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal()">Cerrar</button>
                         <button type="button" v-if="actionType==1" class="btn btn-primary" @click="registerCategory()">Guardar</button>
-                        <button type="button" v-if="actionType==2" class="btn btn-primary">Actualizar</button>
+                        <button type="button" v-if="actionType==2" class="btn btn-primary" @click="updateCategory()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -160,12 +160,18 @@
     export default {
         data(){
             return{
+                //Global Variables
+                category_id: 0,
                 name: '',
                 description: '',
                 arrayCategory: [],
+
+                //Modal Variables
                 modal: 0,
                 modalTitle: '',
                 actionType: 0,
+
+                //Validate Category
                 categoryError: 0,
                 categoryShowErrorMsg: []
             }
@@ -204,6 +210,26 @@
                 });
 
             },
+            updateCategory(){
+
+                if (this.validateCategory()) {
+                    return;
+                }
+
+                let me = this;
+
+                axios.put('/categoria/actualizar', {
+                    'name': this.name,
+                    'description': this.description,
+                    'id': this.category_id
+                }).then(function (response){
+                    //Executed Succesfully
+                    me.closeModal();
+                    me.listCategory();
+                }).catch(function (error) {
+                        console.log(error);
+                });
+            },
             validateCategory(){
                 this.categoryError=0;
                 this.categoryShowErrorMsg = [];
@@ -226,6 +252,7 @@
                         switch (action) {
                             case 'register':
                             {
+                                //Show Modal
                                 this.modal = 1;
                                 this.modalTitle = 'Registrar Categoria';
                                 this.name = '';
@@ -235,6 +262,14 @@
                             }
                             case 'update':
                             {
+                                // console.log(data);
+                                this.modal = 1;
+                                this.modalTitle = 'Actualizar Categoría';
+                                this.actionType = 2;
+                                this.category_id = data['id'];
+                                this.name = data['name'];
+                                this.description = data['description'];
+                                break;
 
                             }
                         }

@@ -1924,12 +1924,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      //Global Variables
+      category_id: 0,
       name: '',
       description: '',
       arrayCategory: [],
+      //Modal Variables
       modal: 0,
       modalTitle: '',
       actionType: 0,
+      //Validate Category
       categoryError: 0,
       categoryShowErrorMsg: []
     };
@@ -1964,6 +1968,24 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
+    updateCategory: function updateCategory() {
+      if (this.validateCategory()) {
+        return;
+      }
+
+      var me = this;
+      axios.put('/categoria/actualizar', {
+        'name': this.name,
+        'description': this.description,
+        'id': this.category_id
+      }).then(function (response) {
+        //Executed Succesfully
+        me.closeModal();
+        me.listCategory();
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
     validateCategory: function validateCategory() {
       this.categoryError = 0;
       this.categoryShowErrorMsg = [];
@@ -1986,6 +2008,7 @@ __webpack_require__.r(__webpack_exports__);
             switch (action) {
               case 'register':
                 {
+                  //Show Modal
                   this.modal = 1;
                   this.modalTitle = 'Registrar Categoria';
                   this.name = '';
@@ -1995,7 +2018,16 @@ __webpack_require__.r(__webpack_exports__);
                 }
 
               case 'update':
-                {}
+                {
+                  // console.log(data);
+                  this.modal = 1;
+                  this.modalTitle = 'Actualizar Categoría';
+                  this.actionType = 2;
+                  this.category_id = data['id'];
+                  this.name = data['name'];
+                  this.description = data['description'];
+                  break;
+                }
             }
           }
       }
@@ -37793,7 +37825,12 @@ var render = function() {
                       "button",
                       {
                         staticClass: "btn btn-primary",
-                        attrs: { type: "button" }
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.updateCategory()
+                          }
+                        }
                       },
                       [_vm._v("Actualizar")]
                     )
