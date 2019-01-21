@@ -1915,6 +1915,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1923,7 +1929,9 @@ __webpack_require__.r(__webpack_exports__);
       arrayCategory: [],
       modal: 0,
       modalTitle: '',
-      actionType: 0
+      actionType: 0,
+      categoryError: 0,
+      categoryShowErrorMsg: []
     };
   },
   methods: {
@@ -1940,6 +1948,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     registerCategory: function registerCategory() {
+      if (this.validateCategory()) {
+        return;
+      }
+
       var me = this;
       axios.post('/categoria/registrar', {
         'name': this.name,
@@ -1951,6 +1963,13 @@ __webpack_require__.r(__webpack_exports__);
       }).catch(function (error) {
         console.log(error);
       });
+    },
+    validateCategory: function validateCategory() {
+      this.categoryError = 0;
+      this.categoryShowErrorMsg = [];
+      if (!this.name) this.categoryShowErrorMsg.push('El Nombre de la categoria no puede estar vacío.');
+      if (this.categoryShowErrorMsg.length) this.categoryError = 1;
+      return this.categoryError;
     },
     closeModal: function closeModal() {
       this.modal = 0;
@@ -6261,7 +6280,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.modal-content{\n    width: 100% !important;\n    position: absolute !important;\n}\n.show{\n    display: list-item !important;\n    opacity: 1 !important;\n    position: absolute !important;\n    background-color: #3c29297a !important;\n}\n", ""]);
+exports.push([module.i, "\n.modal-content{\n    width: 100% !important;\n    position: absolute !important;\n}\n.show{\n    display: list-item !important;\n    opacity: 1 !important;\n    position: absolute !important;\n    background-color: #3c29297a !important;\n}\n.div-error{\n    display: flex;\n    justify-content: center;\n}\n.text-error{\n    color: red !important;\n    font-weight: bold;\n}\n", ""]);
 
 // exports
 
@@ -37665,11 +37684,7 @@ var render = function() {
                               _vm.name = $event.target.value
                             }
                           }
-                        }),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "help-block" }, [
-                          _vm._v("(*) Ingrese el nombre de la categoría")
-                        ])
+                        })
                       ])
                     ]),
                     _vm._v(" "),
@@ -37709,7 +37724,35 @@ var render = function() {
                           }
                         })
                       ])
-                    ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.categoryError,
+                            expression: "categoryError"
+                          }
+                        ],
+                        staticClass: "form-group row div-error"
+                      },
+                      [
+                        _c(
+                          "div",
+                          { staticClass: "text-center text-error" },
+                          _vm._l(_vm.categoryShowErrorMsg, function(error) {
+                            return _c("div", {
+                              key: error,
+                              domProps: { textContent: _vm._s(error) }
+                            })
+                          }),
+                          0
+                        )
+                      ]
+                    )
                   ]
                 )
               ]),
