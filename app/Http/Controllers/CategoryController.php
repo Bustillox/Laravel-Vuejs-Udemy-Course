@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\DB;
 use App\Category;
 
 class CategoryController extends Controller
@@ -12,11 +13,24 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        $categories = Category::all();
-        return $categories;
+        if(!$request->ajax()) return redirect('/');
+        $categories = Category::paginate(3);
+
+        return [
+            'pagination' => [
+                'total' => $categories->total(),
+                'current_page' => $categories->currentPage(),
+                'per_page' => $categories->perPage(),
+                'last_page' => $categories->lastPage(),
+                'from' => $categories->firstItem(),
+                'to' => $categories->lastItem(),
+            ],
+            'categories' => $categories
+        ];
+
+        // return $categories;
     }
 
     /**
@@ -27,6 +41,8 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         //Model Instance
         $category = new Category();
 
@@ -45,6 +61,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
         //Model Instance
         $category = Category::findOrFail($request->id);
 
@@ -63,7 +80,7 @@ class CategoryController extends Controller
      */
     public function activate(Request $request)
     {
-        //
+        if(!$request->ajax()) return redirect('/');
         $category = Category::findOrFail($request->id);
         $category->condition = '1';      
         $category->save();
@@ -77,7 +94,7 @@ class CategoryController extends Controller
      */
     public function deactivate(Request $request)
     {
-        //
+        if(!$request->ajax()) return redirect('/');
         $category = Category::findOrFail($request->id);
         $category->condition = '0';      
         $category->save();
