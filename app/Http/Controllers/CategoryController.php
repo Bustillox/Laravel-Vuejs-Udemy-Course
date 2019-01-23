@@ -16,8 +16,16 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        $categories = Category::paginate(3);
+        
+        $search = $request->search;
+        $criteria = $request->criteria;
 
+        if ($search=='') {
+            $categories = Category::orderBy('id', 'desc')->paginate(3);
+        }else {
+            $categories = Category::where($criteria,  'like', '%'. $search . '%')->orderBy('id', 'desc')->paginate(3);
+        }
+        
         return [
             'pagination' => [
                 'total' => $categories->total(),
@@ -29,8 +37,6 @@ class CategoryController extends Controller
             ],
             'categories' => $categories
         ];
-
-        // return $categories;
     }
 
     /**
