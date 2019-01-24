@@ -8,8 +8,8 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Categorías
-                    <button type="button" @click="openModal('category', 'register')" class="btn btn-secondary">
+                    <i class="fa fa-align-justify"></i> Artículos
+                    <button type="button" @click="openModal('item', 'register')" class="btn btn-secondary">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
                 </div>
@@ -21,8 +21,8 @@
                                 <option value="name">Nombre</option>
                                 <option value="description">Descripción</option>
                                 </select>
-                                <input type="text" v-model="search" @keyup.enter="listCategory(1,search,criteria)" class="form-control" placeholder="Texto a buscar">
-                                <button type="submit" @click="listCategory(1,search,criteria)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                <input type="text" v-model="search" @keyup.enter="listItem(1,search,criteria)" class="form-control" placeholder="Texto a buscar">
+                                <button type="submit" @click="listItem(1,search,criteria)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -30,32 +30,40 @@
                         <thead>
                             <tr>
                                 <th>Opciones</th>
+                                <th>Código</th>
                                 <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Precio de Venta</th>
+                                <th>Stock</th>
                                 <th>Descripción</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="category in arrayCategory" :key="category.id">
+                            <tr v-for="item in arrayItem" :key="item.id">
                                 <td>
-                                    <button type="button" @click="openModal('category', 'update', category)" class="btn btn-warning btn-sm">
+                                    <button type="button" @click="openModal('item', 'update', item)" class="btn btn-warning btn-sm">
                                     <i class="icon-pencil"></i>
                                     </button> &nbsp;
-                                    <template v-if="category.condition">
-                                        <button type="button" class="btn btn-danger btn-sm" @click="deactivateCategory(category.id)">
+                                    <template v-if="item.condition">
+                                        <button type="button" class="btn btn-danger btn-sm" @click="deactivateItem(item.id)">
                                             <i class="icon-trash"></i>
                                         </button>
                                     </template>
                                     <template v-else>
-                                        <button type="button" class="btn btn-info btn-sm" @click="activateCategory(category.id)">
+                                        <button type="button" class="btn btn-info btn-sm" @click="activateItem(item.id)">
                                             <i class="icon-check"></i>
                                         </button>
                                     </template>
                                 </td>
-                                <td v-text="category.name"></td>
-                                <td v-text="category.description"></td>
+                                <td v-text="item.code"></td>
+                                <td v-text="item.name"></td>
+                                <td v-text="item.category_name"></td>
+                                <td v-text="item.sale_price"></td>
+                                <td v-text="item.stock"></td>
+                                <td v-text="item.description"></td>
                                 <td>
-                                    <div v-if="category.condition">
+                                    <div v-if="item.condition">
                                         <span class="badge badge-success">Activo</span>
                                     </div>
                                     <div v-else>
@@ -117,8 +125,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal()">Cerrar</button>
-                        <button type="button" v-if="actionType==1" class="btn btn-primary" @click="registerCategory()">Guardar</button>
-                        <button type="button" v-if="actionType==2" class="btn btn-primary" @click="updateCategory()">Actualizar</button>
+                        <button type="button" v-if="actionType==1" class="btn btn-primary" @click="registerItem()">Guardar</button>
+                        <button type="button" v-if="actionType==2" class="btn btn-primary" @click="updateItem()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -134,19 +142,23 @@
         data(){
             return{
                 //Global Variables
-                category_id: 0,
+                item_id: 0,
+                id_category: 0,
+                category_name: '',
                 name: '',
+                sale_price: 0,
+                stock: 0,
                 description: '',
-                arrayCategory: [],
+                arrayItem: [],
 
                 //Modal Variables
                 modal: 0,
                 modalTitle: '',
                 actionType: 0,
 
-                //Validate Category
-                categoryError: 0,
-                categoryShowErrorMsg: [],
+                //Validate Item
+                itemError: 0,
+                itemShowErrorMsg: [],
 
                 //Pagination
                 pagination: {
@@ -195,15 +207,15 @@
             }
         },
         methods:{
-            listCategory(page,search,criteria){
+            listItem(page,search,criteria){
                 let me = this;
-                var url = '/categoria?page=' + page + '&search=' + search + '&criteria=' + criteria;
+                var url = '/articulo?page=' + page + '&search=' + search + '&criteria=' + criteria;
                 
                 //Categories table registries
                 axios.get(url).then(function (response) {
                     var respuesta = response.data;
                     // handle success
-                    me.arrayCategory = respuesta.categories.data;
+                    me.arrayItem = respuesta.items.data;
                     me.pagination = respuesta.pagination;
                     // console.log(response);
                 })
@@ -219,49 +231,49 @@
                 me.pagination.current_page = page;
 
                 //Send the current page view data request
-                me.listCategory(page, search, criteria);
+                me.listItem(page, search, criteria);
             },
-            registerCategory(){
+            registerItem(){
 
-                if (this.validateCategory()) {
+                if (this.validateItem()) {
                     return;
                 }
 
                 let me = this;
 
-                axios.post('/categoria/registrar', {
+                axios.post('/articulo/registrar', {
                     'name': this.name,
                     'description': this.description
                 }).then(function (response){
                     //Executed Succesfully
                     me.closeModal();
-                    me.listCategory(1,'','name');
+                    me.listItem(1,'','name');
                 }).catch(function (error) {
                         console.log(error);
                 });
 
             },
-            updateCategory(){
+            updateItem(){
 
-                if (this.validateCategory()) {
+                if (this.validateItem()) {
                     return;
                 }
 
                 let me = this;
 
-                axios.put('/categoria/actualizar', {
+                axios.put('/articulo/actualizar', {
                     'name': this.name,
                     'description': this.description,
                     'id': this.category_id
                 }).then(function (response){
                     //Executed Succesfully
                     me.closeModal();
-                    me.listCategory(1,'','name');
+                    me.listItem(1,'','name');
                 }).catch(function (error) {
                         console.log(error);
                 });
             },
-            deactivateCategory(id){
+            deactivateItem(id){
                 const swalWithBootstrapButtons = Swal.mixin({
                 confirmButtonClass: 'btn btn-success',
                 cancelButtonClass: 'btn btn-danger',
@@ -285,7 +297,7 @@
                         'id': id
                     }).then(function (response){
                         //Executed Succesfully
-                        me.listCategory(1,'','name');
+                        me.listItem(1,'','name');
 
                         swalWithBootstrapButtons.fire(
                         'Eliminado Satisfactoriamente!',
@@ -303,7 +315,7 @@
                 }
                 })
             },
-            activateCategory(id){
+            activateItem(id){
                 const swalWithBootstrapButtons = Swal.mixin({
                 confirmButtonClass: 'btn btn-success',
                 cancelButtonClass: 'btn btn-danger',
@@ -327,7 +339,7 @@
                         'id': id
                     }).then(function (response){
                         //Executed Succesfully
-                        me.listCategory(1,'','name');
+                        me.listItem(1,'','name');
 
                         swalWithBootstrapButtons.fire(
                         'Activado!',
@@ -345,7 +357,7 @@
                 }
                 })
             },
-            validateCategory(){
+            validateItem(){
                 this.categoryError=0;
                 this.categoryShowErrorMsg = [];
 
@@ -362,14 +374,14 @@
             },
             openModal(model, action, data = []){
                 switch (model) {
-                    case "category":
+                    case "item":
                     {
                         switch (action) {
                             case 'register':
                             {
                                 //Show Modal
                                 this.modal = 1;
-                                this.modalTitle = 'Registrar Categoria';
+                                this.modalTitle = 'Registrar Artículo';
                                 this.name = '';
                                 this.description = '';
                                 this.actionType = 1;
@@ -379,7 +391,7 @@
                             {
                                 // console.log(data);
                                 this.modal = 1;
-                                this.modalTitle = 'Actualizar Categoría';
+                                this.modalTitle = 'Actualizar Artículo';
                                 this.actionType = 2;
                                 this.category_id = data['id'];
                                 this.name = data['name'];
@@ -394,7 +406,7 @@
             }
         },
         mounted() {
-            this.listCategory(1,this.search,this.criteria);
+            this.listItem(1,this.search,this.criteria);
             console.log('Component mounted.')
         }
     }
