@@ -14,16 +14,29 @@
 Route::get('/', function () {
     return view('content/content');
 });
+// Categories
+    //Categories Index
+    Route::get('/categoria', 'CategoryController@index');
+    //Register Category
+    Route::post('/categoria/registrar', 'CategoryController@store');
+    //Update Category
+    Route::put('/categoria/actualizar', 'CategoryController@update');
+    //Deactivate Category
+    Route::put('/categoria/desactivar', 'CategoryController@deactivate');
+    //Activate Category
+    Route::put('/categoria/activar', 'CategoryController@activate');
+//
 
-//Categories Index
-Route::get('/categoria', 'CategoryController@index');
-//Register Category
-Route::post('/categoria/registrar', 'CategoryController@store');
-//Update Category
-Route::put('/categoria/actualizar', 'CategoryController@update');
-//Deactivate Category
-Route::put('/categoria/desactivar', 'CategoryController@deactivate');
-//Activate Category
-Route::put('/categoria/activar', 'CategoryController@activate');
-
+// Items
+    //Categories Index
+    Route::get('/articulo', 'ItemController@index');
+    //Register Category
+    Route::post('/articulo/registrar', 'ItemController@store');
+    //Update Category
+    Route::put('/articulo/actualizar', 'ItemController@update');
+    //Deactivate Category
+    Route::put('/articulo/desactivar', 'ItemController@deactivate');
+    //Activate Category
+    Route::put('/articulo/activar', 'ItemController@activate');
+//
 
