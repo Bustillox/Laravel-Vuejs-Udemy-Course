@@ -49,7 +49,7 @@ class CategoryController extends Controller
     {
         if(!$request->ajax()) return redirect('/');
         $categories = Category::where('condition','=', '1')
-        ->select('id', 'name as label')
+        ->select('id', 'name')
         ->orderBy('name', 'asc')
         ->get();
 

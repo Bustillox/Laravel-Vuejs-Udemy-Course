@@ -2141,8 +2141,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-select */ "./node_modules/vue-select/dist/vue-select.js");
-/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -2311,7 +2309,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2422,7 +2419,11 @@ __webpack_require__.r(__webpack_exports__);
 
       var me = this;
       axios.post('/articulo/registrar', {
+        'id_category': this.id_category,
+        'code': this.code,
         'name': this.name,
+        'stock': this.stock,
+        'sale_price': this.sale_price,
         'description': this.description
       }).then(function (response) {
         //Executed Succesfully
@@ -2515,17 +2516,26 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     validateItem: function validateItem() {
-      this.categoryError = 0;
-      this.categoryShowErrorMsg = [];
-      if (!this.name) this.categoryShowErrorMsg.push('El Nombre de la categoria no puede estar vacío.');
-      if (this.categoryShowErrorMsg.length) this.categoryError = 1;
-      return this.categoryError;
+      this.itemError = 0;
+      this.itemShowErrorMsg = [];
+      if (this.id_category == 0) this.itemShowErrorMsg.push('Seleccione una categoría.');
+      if (!this.name) this.itemShowErrorMsg.push('El Nombre del artículo no puede estar vacío.');
+      if (!this.stock) this.itemShowErrorMsg.push('El stock del artículo debe de ser un numero y no puede estar vacío.');
+      if (!this.sale_price) this.itemShowErrorMsg.push('El precio de venta del artículo debe de ser un número y no puede estar vacio');
+      if (this.itemShowErrorMsg.length) this.itemError = 1;
+      return this.itemError;
     },
     closeModal: function closeModal() {
       this.modal = 0;
       this.modalTitle = '';
+      this.id_category = 0;
+      this.category_name = '';
+      this.code = '';
       this.name = '';
+      this.sale_price = 0;
+      this.stock = 0;
       this.description = '';
+      this.itemError = 0;
     },
     openModal: function openModal(model, action) {
       var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
@@ -2539,7 +2549,12 @@ __webpack_require__.r(__webpack_exports__);
                   //Show Modal
                   this.modal = 1;
                   this.modalTitle = 'Registrar Artículo';
+                  this.id_category = 0;
+                  this.category_name = '';
+                  this.code = '';
                   this.name = '';
+                  this.sale_price = 0;
+                  this.stock = 0;
                   this.description = '';
                   this.actionType = 1;
                   break;
@@ -2551,8 +2566,12 @@ __webpack_require__.r(__webpack_exports__);
                   this.modal = 1;
                   this.modalTitle = 'Actualizar Artículo';
                   this.actionType = 2;
-                  this.category_id = data['id'];
+                  this.item_id = data['id'];
+                  this.id_category = data['id_category'];
+                  this.code = data['code'];
                   this.name = data['name'];
+                  this.stock = data['stock'];
+                  this.sale_price = data['sale_price'];
                   this.description = data['description'];
                   break;
                 }
@@ -39038,23 +39057,55 @@ var render = function() {
                         [_vm._v("Categoría")]
                       ),
                       _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "col-md-9" },
-                        [
-                          _c("v-select", {
-                            attrs: { options: _vm.arrayCategory },
-                            model: {
-                              value: _vm.id_category,
-                              callback: function($$v) {
-                                _vm.id_category = $$v
-                              },
-                              expression: "id_category"
+                      _c("div", { staticClass: "col-md-9" }, [
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.id_category,
+                                expression: "id_category"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.id_category = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              }
                             }
-                          })
-                        ],
-                        1
-                      )
+                          },
+                          [
+                            _c(
+                              "option",
+                              { attrs: { value: "0", disabled: "" } },
+                              [_vm._v("Seleccione una Categoría")]
+                            ),
+                            _vm._v(" "),
+                            _vm._l(_vm.arrayCategory, function(category) {
+                              return _c("option", {
+                                key: category.id,
+                                domProps: {
+                                  value: category.id,
+                                  textContent: _vm._s(category.name)
+                                }
+                              })
+                            })
+                          ],
+                          2
+                        )
+                      ])
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group row" }, [

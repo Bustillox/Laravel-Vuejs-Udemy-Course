@@ -105,12 +105,12 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Categoría</label>
                                 <div class="col-md-9">
-                                    <v-select v-model="id_category" :options="arrayCategory">
-                                    </v-select>
-                                    <!-- <select class="form-control" v-model="id_category">
+                                    <!-- <v-select v-model="id_category" :options="arrayCategory">
+                                    </v-select> -->
+                                    <select class="form-control" v-model="id_category">
                                         <option value="0" disabled>Seleccione una Categoría</option>
                                         <option v-for="category in arrayCategory" :key="category.id" :value="category.id" v-text="category.name"></option>
-                                    </select> -->
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -167,7 +167,6 @@
 </template>
 
 <script>
-    import vSelect from "vue-select";
     export default {
         data(){
             return{
@@ -289,7 +288,11 @@
                 let me = this;
 
                 axios.post('/articulo/registrar', {
+                    'id_category':this.id_category,
+                    'code': this.code,
                     'name': this.name,
+                    'stock': this.stock,
+                    'sale_price': this.sale_price,
                     'description': this.description
                 }).then(function (response){
                     //Executed Succesfully
@@ -405,19 +408,29 @@
                 })
             },
             validateItem(){
-                this.categoryError=0;
-                this.categoryShowErrorMsg = [];
+                this.itemError=0;
+                this.itemShowErrorMsg = [];
 
-                if(!this.name) this.categoryShowErrorMsg.push('El Nombre de la categoria no puede estar vacío.');
-                if (this.categoryShowErrorMsg.length) this.categoryError = 1;
+                if(this.id_category == 0) this.itemShowErrorMsg.push('Seleccione una categoría.');
+                if(!this.name) this.itemShowErrorMsg.push('El Nombre del artículo no puede estar vacío.');
+                if(!this.stock) this.itemShowErrorMsg.push('El stock del artículo debe de ser un numero y no puede estar vacío.');
+                if(!this.sale_price) this.itemShowErrorMsg.push('El precio de venta del artículo debe de ser un número y no puede estar vacio');
+
+                if (this.itemShowErrorMsg.length) this.itemError = 1;
                 
-                return this.categoryError;
+                return this.itemError;
             },
             closeModal(){
                 this.modal = 0;
                 this.modalTitle = '';
+                this.id_category = 0;
+                this.category_name = '';
+                this.code = '';
                 this.name = '';
+                this.sale_price = 0;
+                this.stock = 0;
                 this.description = '';
+                this.itemError = 0;
             },
             openModal(model, action, data = []){
                 switch (model) {
@@ -429,7 +442,12 @@
                                 //Show Modal
                                 this.modal = 1;
                                 this.modalTitle = 'Registrar Artículo';
+                                this.id_category = 0;
+                                this.category_name = '';
+                                this.code = '';
                                 this.name = '';
+                                this.sale_price = 0;
+                                this.stock = 0;
                                 this.description = '';
                                 this.actionType = 1;
                                 break;
@@ -440,8 +458,12 @@
                                 this.modal = 1;
                                 this.modalTitle = 'Actualizar Artículo';
                                 this.actionType = 2;
-                                this.category_id = data['id'];
+                                this.item_id = data['id'];
+                                this.id_category = data['id_category'];
+                                this.code = data['code'];
                                 this.name = data['name'];
+                                this.stock = data['stock'];
+                                this.sale_price = data['sale_price'];
                                 this.description = data['description'];
                                 break;
 
