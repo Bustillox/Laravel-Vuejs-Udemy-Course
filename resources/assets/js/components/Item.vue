@@ -103,9 +103,38 @@
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Categoría</label>
+                                <div class="col-md-9">
+                                    <v-select v-model="id_category" :options="arrayCategory">
+                                    </v-select>
+                                    <!-- <select class="form-control" v-model="id_category">
+                                        <option value="0" disabled>Seleccione una Categoría</option>
+                                        <option v-for="category in arrayCategory" :key="category.id" :value="category.id" v-text="category.name"></option>
+                                    </select> -->
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Código</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="code" class="form-control" placeholder="Código de Barras">
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                 <div class="col-md-9">
-                                    <input type="text" v-model="name" class="form-control" placeholder="Nombre de categoría">
+                                    <input type="text" v-model="name" class="form-control" placeholder="Nombre de artículo">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="email-input">Precio de Venta</label>
+                                <div class="col-md-9">
+                                    <input type="number" v-model="sale_price" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="email-input">Stock</label>
+                                <div class="col-md-9">
+                                    <input type="number" v-model="stock" class="form-control" placeholder="">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -114,9 +143,9 @@
                                     <input type="email" v-model="description" class="form-control" placeholder="Ingrese descripcion de la categoria">
                                 </div>
                             </div>
-                            <div v-show="categoryError" class="form-group row div-error">
+                            <div v-show="itemError" class="form-group row div-error">
                                 <div class="text-center text-error">
-                                    <div v-for="error in categoryShowErrorMsg" :key="error" v-text="error">
+                                    <div v-for="error in itemShowErrorMsg" :key="error" v-text="error">
 
                                     </div>
                                 </div>
@@ -138,6 +167,7 @@
 </template>
 
 <script>
+    import vSelect from "vue-select";
     export default {
         data(){
             return{
@@ -145,6 +175,7 @@
                 item_id: 0,
                 id_category: 0,
                 category_name: '',
+                code: '',
                 name: '',
                 sale_price: 0,
                 stock: 0,
@@ -171,7 +202,8 @@
                 },
                 offset: 3,
                 criteria: 'name',
-                search: ''
+                search: '',
+                arrayCategory: [],
             }
         },
         computed:{
@@ -218,6 +250,21 @@
                     me.arrayItem = respuesta.items.data;
                     me.pagination = respuesta.pagination;
                     // console.log(response);
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
+            },
+            selectCategory(){
+                let me = this;
+                var url = '/categoria/selectCategoria';
+                
+                //Categories table registries
+                axios.get(url).then(function (response) {
+                    var respuesta = response.data;
+                    // handle success
+                    me.arrayCategory = respuesta.categories;
                 })
                 .catch(function (error) {
                     // handle error
@@ -402,6 +449,7 @@
                         }
                     }
                 }
+                this.selectCategory();
 
             }
         },

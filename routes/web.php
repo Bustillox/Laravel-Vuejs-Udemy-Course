@@ -25,6 +25,8 @@ Route::get('/', function () {
     Route::put('/categoria/desactivar', 'CategoryController@deactivate');
     //Activate Category
     Route::put('/categoria/activar', 'CategoryController@activate');
+    //Categories Select
+    Route::get('/categoria/selectCategoria', 'CategoryController@selectCategory');
 //
 
 // Items
