@@ -359,6 +359,7 @@
                 this.modalTitle = '';
                 this.name = '';
                 this.description = '';
+                this.categoryError = 0;
             },
             openModal(model, action, data = []){
                 switch (model) {

@@ -43,11 +43,11 @@ Route::get('/', function () {
 //
 
 // Customers
-    //Categories Index
+    //Customers Index
     Route::get('/cliente', 'CustomerController@index');
-    //Register Category
+    //Register Customer
     Route::post('/cliente/registrar', 'CustomerController@store');
-    //Update Category
+    //Update Customer
     Route::put('/cliente/actualizar', 'CustomerController@update');
 //
 

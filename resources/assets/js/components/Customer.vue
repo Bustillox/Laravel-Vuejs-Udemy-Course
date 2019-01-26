@@ -88,13 +88,41 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                 <div class="col-md-9">
-                                    <input type="text" v-model="name" class="form-control" placeholder="Nombre de categoría">
+                                    <input type="text" v-model="name" class="form-control" placeholder="Nombre del cliente">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="email-input">Descripción</label>
+                                <label class="col-md-3 form-control-label" for="text-input">Tipo de Documento</label>
                                 <div class="col-md-9">
-                                    <input type="email" v-model="description" class="form-control" placeholder="Ingrese descripcion de la categoria">
+                                    <select v-model="document_type" class="form-control">
+                                        <option value="RFC">RFC</option>
+                                        <option value="RUC">RUC</option>
+                                        <option value="PASS">PASS</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Número</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="document_number" class="form-control" placeholder="Número del Documento">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Dirección</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="address" class="form-control" placeholder="Dirección">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Teléfono</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="phone" class="form-control" placeholder="Teléfono">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="email-input">Email</label>
+                                <div class="col-md-9">
+                                    <input type="email" v-model="email" class="form-control" placeholder="Email">
                                 </div>
                             </div>
                             <div v-show="customerError" class="form-group row div-error">
@@ -128,7 +156,7 @@
                 //Global Variables
                 customer_id: 0,
                 name: '',
-                document_type: 'DNI',
+                document_type: 'RFC',
                 document_number: '',
                 address: '',
                 phone: '',
@@ -226,7 +254,7 @@
 
                 let me = this;
 
-                axios.post('/categoria/registrar', {
+                axios.post('/cliente/registrar', {
                     'name': this.name,
                     'document_type': this.document_type,
                     'document_number': this.document_number,
@@ -250,7 +278,7 @@
 
                 let me = this;
 
-                axios.put('/categoria/actualizar', {
+                axios.put('/cliente/actualizar', {
                     'name': this.name,
                     'document_type': this.document_type,
                     'document_number': this.document_number,
@@ -270,7 +298,7 @@
                 this.customerError=0;
                 this.customerShowErrorMsg = [];
 
-                if(!this.name) this.customerShowErrorMsg.push('El Nombre de la categoria no puede estar vacío.');
+                if(!this.name) this.customerShowErrorMsg.push('El Nombre del cliente no puede estar vacío.');
                 if (this.customerShowErrorMsg.length) this.customerError = 1;
                 
                 return this.customerError;
@@ -279,6 +307,12 @@
                 this.modal = 0;
                 this.modalTitle = '';
                 this.name = '';
+                this.document_type = 'RFC';
+                this.document_number = '';
+                this.address = '';
+                this.phone = '';
+                this.email = '';
+                this.customerError = 0;
             },
             openModal(model, action, data = []){
                 switch (model) {
@@ -289,9 +323,9 @@
                             {
                                 //Show Modal
                                 this.modal = 1;
-                                this.modalTitle = 'Registrar Categoria';
+                                this.modalTitle = 'Registrar Cliente';
                                 this.name = '';
-                                this.document_type = '';
+                                this.document_type = 'RFC';
                                 this.document_number = '';
                                 this.address = '';
                                 this.phone = '';
@@ -304,7 +338,7 @@
                             {
                                 // console.log(data);
                                 this.modal = 1;
-                                this.modalTitle = 'Actualizar Categoría';
+                                this.modalTitle = 'Actualizar Cliente';
                                 this.customer_id = data['id'];
                                 this.name = data['name'];
                                 this.document_type = data['document_type'];
