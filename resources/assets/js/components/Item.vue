@@ -105,7 +105,7 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Categoría</label>
                                 <div class="col-md-9">
-                                    <!-- <v-select v-model="id_category" :options="arrayCategory">
+                                    <!-- <v-select v-model="arrayCategory" :options="[{label: arrayCategory, value: arrayCategory}]">
                                     </v-select> -->
                                     <select class="form-control" v-model="id_category">
                                         <option value="0" disabled>Seleccione una Categoría</option>

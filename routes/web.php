@@ -42,3 +42,12 @@ Route::get('/', function () {
     Route::put('/articulo/activar', 'ItemController@activate');
 //
 
+// Customers
+    //Categories Index
+    Route::get('/cliente', 'CustomerController@index');
+    //Register Category
+    Route::post('/cliente/registrar', 'CustomerController@store');
+    //Update Category
+    Route::put('/cliente/actualizar', 'CustomerController@update');
+//
+
