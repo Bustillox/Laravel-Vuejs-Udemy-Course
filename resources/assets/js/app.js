@@ -8,9 +8,14 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-import vSelect from 'vue-select';
-Vue.component('v-select', vSelect)
 
+//Multi-Select
+import vSelect from 'vue-select';
+Vue.component('v-select', vSelect);
+
+//Barcode
+import VueBarcode from 'vue-barcode';
+Vue.component('barcode', VueBarcode);
 
 /**
  * The following block of code may be used to automatically register your

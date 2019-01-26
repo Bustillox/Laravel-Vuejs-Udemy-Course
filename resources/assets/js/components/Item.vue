@@ -117,6 +117,9 @@
                                 <label class="col-md-3 form-control-label" for="text-input">Código</label>
                                 <div class="col-md-9">
                                     <input type="text" v-model="code" class="form-control" placeholder="Código de Barras">
+                                    <barcode :value="code" :options="{format: 'EAN-13'}">
+                                        Generando código de barras...
+                                    </barcode>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -167,6 +170,8 @@
 </template>
 
 <script>
+    // //Barcode
+    // import VueBarcode from 'vue-barcode';
     export default {
         data(){
             return{
@@ -205,6 +210,9 @@
                 arrayCategory: [],
             }
         },
+        // components: {
+        //     'barcode': VueBarcode
+        // },
         computed:{
 
             //Activated(?)
@@ -312,9 +320,13 @@
                 let me = this;
 
                 axios.put('/articulo/actualizar', {
+                    'id_category':this.id_category,
+                    'code': this.code,
                     'name': this.name,
+                    'stock': this.stock,
+                    'sale_price': this.sale_price,
                     'description': this.description,
-                    'id': this.category_id
+                    'id': this.item_id
                 }).then(function (response){
                     //Executed Succesfully
                     me.closeModal();
@@ -331,8 +343,8 @@
                 })
 
                 swalWithBootstrapButtons.fire({
-                title: 'Desactivar Categoría',
-                text: "Esta seguro que quiere desactivar esta categoria?",
+                title: 'Desactivar Artículo',
+                text: "Esta seguro que quiere desactivar este artículo?",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Aceptar',
@@ -343,14 +355,14 @@
 
                     let me = this;
 
-                    axios.put('/categoria/desactivar', {
+                    axios.put('/articulo/desactivar', {
                         'id': id
                     }).then(function (response){
                         //Executed Succesfully
                         me.listItem(1,'','name');
 
                         swalWithBootstrapButtons.fire(
-                        'Eliminado Satisfactoriamente!',
+                        'Desactivado Satisfactoriamente!',
                         'El registro ha sido desactivado satisfactoriamente.',
                         'success'
                         )
@@ -373,8 +385,8 @@
                 })
 
                 swalWithBootstrapButtons.fire({
-                title: 'Activar Categoría',
-                text: "Esta seguro que quiere activar esta categoria?",
+                title: 'Activar Artículo',
+                text: "Esta seguro que quiere activar este artículo?",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Aceptar',
@@ -385,7 +397,7 @@
 
                     let me = this;
 
-                    axios.put('/categoria/activar', {
+                    axios.put('/articulo/activar', {
                         'id': id
                     }).then(function (response){
                         //Executed Succesfully
