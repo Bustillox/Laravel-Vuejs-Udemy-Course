@@ -22,5 +22,9 @@
         "sass-loader": "^7.1.0",
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.5.22"
+    },
+    "dependencies": {
+        "vue-barcode": "^1.1.0",
+        "vue-select": "^2.5.1"
     }
 }

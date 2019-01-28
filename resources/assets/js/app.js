@@ -9,6 +9,14 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+//Multi-Select
+import vSelect from 'vue-select';
+Vue.component('v-select', vSelect);
+
+//Barcode
+import VueBarcode from 'vue-barcode';
+Vue.component('barcode', VueBarcode);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -22,6 +30,7 @@ window.Vue = require('vue');
 
 Vue.component('category', require('./components/Category.vue').default);
 Vue.component('item', require('./components/Item.vue').default);
+Vue.component('customer', require('./components/Customer.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

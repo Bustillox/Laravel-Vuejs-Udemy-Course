@@ -25,6 +25,8 @@ Route::get('/', function () {
     Route::put('/categoria/desactivar', 'CategoryController@deactivate');
     //Activate Category
     Route::put('/categoria/activar', 'CategoryController@activate');
+    //Categories Select
+    Route::get('/categoria/selectCategoria', 'CategoryController@selectCategory');
 //
 
 // Items
@@ -38,5 +40,14 @@ Route::get('/', function () {
     Route::put('/articulo/desactivar', 'ItemController@deactivate');
     //Activate Category
     Route::put('/articulo/activar', 'ItemController@activate');
+//
+
+// Customers
+    //Customers Index
+    Route::get('/cliente', 'CustomerController@index');
+    //Register Customer
+    Route::post('/cliente/registrar', 'CustomerController@store');
+    //Update Customer
+    Route::put('/cliente/actualizar', 'CustomerController@update');
 //
 
