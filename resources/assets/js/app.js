@@ -31,6 +31,7 @@ Vue.component('barcode', VueBarcode);
 Vue.component('category', require('./components/Category.vue').default);
 Vue.component('item', require('./components/Item.vue').default);
 Vue.component('customer', require('./components/Customer.vue').default);
+Vue.component('provider', require('./components/Provider.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
