@@ -51,3 +51,12 @@ Route::get('/', function () {
     Route::put('/cliente/actualizar', 'CustomerController@update');
 //
 
+// Providers
+    //Providers Index
+    Route::get('/proveedor', 'ProviderController@index');
+    //Register Provider
+    Route::post('/proveedor/registrar', 'ProviderController@store');
+    //Update Provider
+    Route::put('/proveedor/actualizar', 'ProviderController@update');
+//
+
