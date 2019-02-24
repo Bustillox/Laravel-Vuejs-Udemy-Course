@@ -127,6 +127,18 @@
                                     <input type="email" v-model="email" class="form-control" placeholder="Email">
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Contacto</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="contact" class="form-control" placeholder="Nombre del contacto">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Teléfono de Contacto</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="contact_phone" class="form-control" placeholder="Teléfono del contacto">
+                                </div>
+                            </div>
                             <div v-show="customerError" class="form-group row div-error">
                                 <div class="text-center text-error">
                                     <div v-for="error in customerShowErrorMsg" :key="error" v-text="error">
@@ -258,13 +270,15 @@
 
                 let me = this;
 
-                axios.post('/cliente/registrar', {
+                axios.post('/proveedor/registrar', {
                     'name': this.name,
                     'document_type': this.document_type,
                     'document_number': this.document_number,
                     'address': this.address,
                     'phone': this.phone,
                     'email': this.email,
+                    'contact': this.contact,
+                    'contact_phone': this.contact_phone
                 }).then(function (response){
                     //Executed Succesfully
                     me.closeModal();
@@ -282,13 +296,15 @@
 
                 let me = this;
 
-                axios.put('/cliente/actualizar', {
+                axios.put('/proveedor/actualizar', {
                     'name': this.name,
                     'document_type': this.document_type,
                     'document_number': this.document_number,
                     'address': this.address,
                     'phone': this.phone,
                     'email': this.email,
+                    'contact': this.contact,
+                    'contact_phone': this.contact_phone,
                     'id': this.customer_id
                 }).then(function (response){
                     //Executed Succesfully
@@ -316,6 +332,8 @@
                 this.address = '';
                 this.phone = '';
                 this.email = '';
+                this.contact = '';
+                this.contact_phone = '';
                 this.customerError = 0;
             },
             openModal(model, action, data = []){
@@ -327,13 +345,15 @@
                             {
                                 //Show Modal
                                 this.modal = 1;
-                                this.modalTitle = 'Registrar Cliente';
+                                this.modalTitle = 'Registrar Proveedor';
                                 this.name = '';
                                 this.document_type = 'RFC';
                                 this.document_number = '';
                                 this.address = '';
                                 this.phone = '';
                                 this.email = '';
+                                this.contact = '';
+                                this.contact_phone = '';
 
                                 this.actionType = 1;
                                 break;
@@ -342,7 +362,7 @@
                             {
                                 // console.log(data);
                                 this.modal = 1;
-                                this.modalTitle = 'Actualizar Cliente';
+                                this.modalTitle = 'Actualizar Proveedor';
                                 this.customer_id = data['id'];
                                 this.name = data['name'];
                                 this.document_type = data['document_type'];
@@ -350,6 +370,8 @@
                                 this.address = data['address'];
                                 this.phone = data['phone'];
                                 this.email = data['email'];
+                                this.contact = data['contact'];
+                                this.contact_phone = data['contact_phone'];
                                 
                                 this.actionType = 2;
                                 break;
