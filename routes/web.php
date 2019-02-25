@@ -64,3 +64,16 @@ Route::get('/', function () {
     //Roles Index
     Route::get('/rol', 'RoleController@index');
 //
+
+// Users
+    //Users Index
+    Route::get('/user', 'UserController@index');
+    //Register User
+    Route::post('/user/registrar', 'UserController@store');
+    //Update User
+    Route::put('/user/actualizar', 'UserController@update');
+    //Deactivate User
+    Route::put('/user/desactivar', 'UserController@deactivate');
+    //Activate User
+    Route::put('/user/activar', 'UserController@activate');
+//
