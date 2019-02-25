@@ -60,3 +60,7 @@ Route::get('/', function () {
     Route::put('/proveedor/actualizar', 'ProviderController@update');
 //
 
+// Roles
+    //Roles Index
+    Route::get('/rol', 'RoleController@index');
+//
